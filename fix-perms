@@ -1,0 +1,24 @@
+#!/bin/bash
+
+echo "Correcting permissions for C/C++ development files at directory tree at root $PWD"
+
+find . \
+	! -type d -a \
+	"(" \
+		-name "Makefile" -o \
+		-name "*.cpp" -o \
+		-name "*.c" -o \
+		-name "*.hpp" -o \
+		-name "*.h" \
+	")" -print0	\
+	| xargs --null --no-run-if-empty chmod -x
+
+RSLT=$?
+if [ $RSLT -ne 0 ]
+then
+	echo "Error in processing."
+else
+	echo "Done."
+fi
+
+exit $RSLT

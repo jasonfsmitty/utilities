@@ -1,0 +1,27 @@
+#!/bin/bash
+
+expression="$1"
+directory="$2"
+
+if [ -z "$expression" ]
+then
+	echo "Usage: $0 <expression> [<directory>]"
+	exit 1
+fi
+
+if [ -z "$directory" ]
+then
+	directory="."
+fi
+
+grep \
+	--color \
+	--recursive \
+	--mmap \
+	--line-number \
+	-I \
+	"$expression" \
+	$directory
+
+exit $?
+

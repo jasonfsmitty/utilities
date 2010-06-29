@@ -1,0 +1,33 @@
+#!/bin/bash
+
+expression="$1"
+directory="$2"
+
+if [ -z "$expression" ]
+then
+	echo "Usage: $0 <expression> [<directory>]"
+	exit 1
+fi
+
+if [ -z "$directory" ]
+then
+	directory="."
+fi
+
+grep \
+	-i            \
+	--color       \
+	--recursive   \
+	--mmap        \
+	--line-number \
+	-I            \
+	--include="*.cpp"      \
+	--include="*.cc"       \
+	--include="*.c"        \
+	--include="*.hpp"      \
+	--include="*.h"        \
+	"$expression"          \
+	$directory
+
+exit $?
+

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+expression="$1"
+directory="$2"
+
+if [ "$expression" == "" ]
+then
+	echo "Usage: $0 <expression> [<directory>]"
+	exit 1
+fi
+
+if [ "$directory" == "" ]
+then
+	directory="."
+fi
+
+grep \
+	--color \
+	--recursive \
+	--mmap \
+	--line-number \
+	-I \
+	--include="*.hpp" \
+	--include="*.h" \
+	"$expression" \
+	$directory
+
+exit $?
+

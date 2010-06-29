@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# Run grep through a set of files matching a specific pattern.
+# Usage:
+#
+
+file_pattern=$1
+search_pattern=$2
+
+usage()
+{
+	echo " Usage: $0 <file_pattern> <search_pattern>"
+	echo "  file_pattern   -   Regular expression passed to find, used to determine which files are grep'ed."
+	echo "  search_pattern -   Regular expression passed to grep."
+}
+
+if [ -z "$file_pattern" ]
+then
+	usage
+	exit 1
+fi
+
+if [ -z "$search_pattern" ]
+then
+	usage
+	exit 1
+fi
+
+
+find . -name "$file_pattern" -print0 | \
+	xargs --null grep -H --color --mmap --line-number "$search_pattern"
+

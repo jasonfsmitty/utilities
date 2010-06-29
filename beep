@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# beep [<exitCode> [<customMsg>]]
+#
+#  <exitCode>   - Optional exit code of the operation that is causing the notification.
+#  <customMsg>  - Optional custom message to display in the dialog box (if applicable).
+#
+# Notify the user of an event using the shells default 'beep' notification.
+#
+# Optionally, if the system supports it, popup a dialog box, possibly with
+# a message indicating success/failure/generic status.
+#
+# To enable the popup message, you need kdialog on the system in question,.
+#
+
+
+# always do the audible beep
+printf '\a'
+
+# check if kdialog is available
+my_kdialog=`which kdialog`
+if [ -x $my_kdialog ]
+then
+	if [ -z "$1" ]
+	then
+		# no exit code from operation
+		$my_kdialog --msgbox "Beep!" 2>/dev/null &
+	else
+		postMsg="!"
+		if [ ! -z "$2" ]
+		then
+			postMsg=": $2"
+		fi
+
+		if [ "$1" -eq "0" ]
+		then
+			kdialog --msgbox "Operation successful$postMsg" 2>/dev/null &
+		else
+			kdialog --error "Operation failed$postMsg" 2>/dev/null &
+		fi
+		exit $1
+	fi
+else
+	echo "Warning: Could not find kdialog, cannot provide visual beep."
+fi
+
+exit 0
+
