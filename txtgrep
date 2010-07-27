@@ -20,6 +20,7 @@ grep \
 	--mmap \
 	--line-number \
 	-I \
+	--no-messages \
 	"$expression" \
 	$directory
 

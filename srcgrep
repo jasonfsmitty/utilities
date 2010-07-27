@@ -21,6 +21,7 @@ grep \
 	--mmap        \
 	--line-number \
 	-I            \
+	--no-messages \
 	--include="*.cpp"      \
 	--include="*.cc"       \
 	--include="*.c"        \

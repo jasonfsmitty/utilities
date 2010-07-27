@@ -28,5 +28,5 @@ fi
 
 
 find . -name "$file_pattern" -print0 | \
-	xargs --null grep -H --color --mmap --line-number "$search_pattern"
+	xargs --null grep -H --color --mmap --line-number --no-messages "$search_pattern"
 
