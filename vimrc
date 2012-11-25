@@ -30,6 +30,8 @@ filetype on        " ??
 set ruler          " show status/ruler at bottom
 set cindent        " default to c indentation
 
+set background=dark
+
 " 'intelligent' comments
 "set comments=sl:/*,mb:\ *,elx:\ */
 
