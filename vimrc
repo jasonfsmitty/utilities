@@ -1,13 +1,11 @@
 "
-" Taken from various places over the years.
-"
-" Some sources:
-"   http://gergap.wordpress.com/2009/05/29/minimal-vimrc-for-cc-developers/
 "
 
 set nocompatible " disable vi compatibility (emulation of old bugs)
+
 set autoindent   " use indentation of previous line
 set smartindent  " intelligent indention for C
+"set cindent        " default to c indentation
 
 set tabstop=4      " set tab width
 set shiftwidth=4   " ?
@@ -17,6 +15,7 @@ set noexpandtab    " must use tabs for indentation
 set nowrap         " disable line wrapping
 set incsearch      " search as you type
 set hlsearch       " highlight all matches to a search
+set smartcase      " be smart about case sensitive/insensitive searching
 
 set bsdir=last     " last accessed dir set as working dir
 
@@ -27,8 +26,9 @@ set showmatch      " show matching braces
 set mat=5          " ??
 filetype on        " ??
 
+:inoremap # X#
+
 set ruler          " show status/ruler at bottom
-set cindent        " default to c indentation
 
 set background=dark
 
@@ -46,14 +46,6 @@ set tags=tags;/   " Search recursively in parent folders for tags file
 
 :map <Down> gj
 :map <Up> gk
-
-
-" OmniCppComplete support
-"   http://vim.wikia.com/wiki/C++_code_completion
-"set tags+=~/.vim/tags/cpp
-"set tags+=~/.vim/tags/gl
-"set tags+=~/.vim/tags/sdl
-"set tags+=~/.vim/tags/qt4
 
 
 "------------------------------------------------------------------

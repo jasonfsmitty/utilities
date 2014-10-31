@@ -18,7 +18,6 @@ grep \
 	$3 \
 	--color       \
 	--recursive   \
-	--mmap        \
 	--line-number \
 	-I            \
 	--no-messages \
@@ -28,6 +27,7 @@ grep \
 	--include="*.hpp"      \
 	--include="*.h"        \
 	--include="*.s"        \
+	--include="*.proto"    \
 	"$expression"          \
 	$directory
 
