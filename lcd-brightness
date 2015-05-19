@@ -1,0 +1,33 @@
+#!/bin/bash
+
+backlight="/sys/class/backlight/intel_backlight"
+current=$(cat ${backlight}/brightness)
+
+max=$(cat ${backlight}/max_brightness)
+min=1
+
+step=$(expr ${max} / 10)
+
+case $1 in
+	up)
+		value=$(expr $current + $step)
+		;;
+	down)
+		value=$(expr $current - $step)
+		;;
+	max)
+		value=${max}
+		;;
+	min)
+		value=1
+		;;
+	*)
+		echo "Error: invalid input $1"
+		exit 1
+		;;
+esac
+
+[[ ${value} -le ${min} ]] && value=${min}
+[[ ${value} -ge ${max} ]] && value=${max}
+
+echo ${value} | sudo tee ${backlight}/brightness
