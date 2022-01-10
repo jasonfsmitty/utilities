@@ -5,43 +5,41 @@
 #  <exitCode>   - Optional exit code of the operation that is causing the notification.
 #  <customMsg>  - Optional custom message to display in the dialog box (if applicable).
 #
-# Notify the user of an event using the shells default 'beep' notification.
-#
-# Optionally, if the system supports it, popup a dialog box, possibly with
-# a message indicating success/failure/generic status.
-#
-# To enable the popup message, you need kdialog on the system in question,.
-#
 
+exitcode="${1}"
+shift
+message="${@}"
 
-# always do the audible beep
+# always try the audible beep
 printf '\a'
 
-# check if kdialog is available
-my_kdialog=`which kdialog`
-if [ -x $my_kdialog ]
+if which zenity &>/dev/null
 then
-	if [ -z "$1" ]
+	msgtext="Beep"
+	msgtype="--info"
+
+	if [[ -n "${exitcode}" ]]
 	then
-		# no exit code from operation
-		$my_kdialog --msgbox "Beep!" 2>/dev/null &
-	else
-		postMsg="!"
-		if [ ! -z "$2" ]
+		if [[ "${exitcode}" == "0" ]]
 		then
-			postMsg=": $2"
+			msgtext="Operation successful"
+			msgtype="--info"
+		else
+			msgtext="Operation failed"
+			msgtype="--error"
 		fi
 
-		if [ "$1" -eq "0" ]
-		then
-			kdialog --msgbox "Operation successful$postMsg" 2>/dev/null &
-		else
-			kdialog --error "Operation failed$postMsg" 2>/dev/null &
-		fi
-		exit $1
+		[[ -n "${message}" ]] && msgtext="${msgtext}:\n\n<tt><big>${message}</big></tt>"
 	fi
+
+	zenity                   \
+		${msgtype}           \
+		--text="${msgtext}"  \
+		--no-wrap            \
+		2>/dev/null &
+
 else
-	echo "Warning: Could not find kdialog, cannot provide visual beep."
+	echo "Error zenity not found, no popup available"
 fi
 
 exit 0
