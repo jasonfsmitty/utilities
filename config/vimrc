@@ -1,6 +1,5 @@
 
 set autoindent
-set smartindent
 
 set ts=4
 set shiftwidth=4
@@ -10,6 +9,7 @@ set noexpandtab
 set nowrap
 set incsearch
 set hlsearch
+set ignorecase
 set smartcase
 
 set showmatch
@@ -31,4 +31,7 @@ noremap k gk
 " Remove all trailing whitespace by pressing F5
 nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 nnoremap <F6> :let _s=@/<Bar>:%s///e<Bar>:let @/=_s<Bar><CR>
+
+
+set runtimepath^=~/.vim/custom/context.vim
 

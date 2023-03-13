@@ -1,0 +1,29 @@
+[user]
+	email = 
+	name = Jason Smith
+[core]
+	editor = vim
+	whitespace = -blank-at-eof,cr-at-eol
+[pull]
+	rebase = false
+[diff]
+	tool = meld
+	guitool = meld
+[difftool]
+	prompt = false
+[difftool "meld"]
+	cmd = meld "$LOCAL" "$REMOTE"
+	br   = branch
+	st   = status
+[alias]
+	meld = difftool -t meld --dir-diff
+[gui]
+	warndetachedcommit = true
+	pruneduringfetch = true
+	diffcontext = 3
+	tabsize = 4
+[remote "origin"]
+	prune = true
+[fetch]
+	prune = true
+

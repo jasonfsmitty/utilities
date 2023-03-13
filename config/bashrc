@@ -1,0 +1,24 @@
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+
+export HISTSIZE=9999999
+export HISTFILESIZE=$HISTSIZE
+export HISTCONTROL=ignoredups:erasedups
+export HISTIGNORE="ls:la:cd:pwd:exit:st"
+shopt -s histappend
+
+export PATH
+alias la='ls -al'
+alias st='git status'
+
+EDITOR=vim
+export EDITOR
+
+# https://stackoverflow.com/a/69299250
+# Disable GDB download of debug info 
+unset DEBUGINFOD_URLS
+

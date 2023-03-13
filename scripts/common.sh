@@ -1,6 +1,13 @@
 #!/bin/bash
 
 #---------------------------------------------------------------------
+# Options for common functions; can modify directly or use the
+# appropriate set_*() helper.
+
+OPT_COMMON_VERBOSE=${OPT_COMMON_VERBOSE:-false}
+OPT_COMMON_DRY_RUN=${OPT_COMMON_DRY_RUN:-false}
+
+#---------------------------------------------------------------------
 # https://unix.stackexchange.com/questions/9957/how-to-check-if-bash-can-print-colors
 if test -t 1
 then
@@ -32,10 +39,89 @@ then
 fi
 
 #---------------------------------------------------------------------
+function parse_bool()
+{
+	case "${1}" in
+		true|yes|1)
+			return 0
+			;;
+
+		false|no|0)
+			return 1
+			;;
+	esac
+	return 2
+}
+
+#---------------------------------------------------------------------
+function to_bool()
+{
+	parse_bool "${1}" && echo "true" || echo "false"
+}
+
+#---------------------------------------------------------------------
+function set_verbose()
+{
+	OPT_COMMON_VERBOSE="$(to_bool $1)"
+}
+
+#---------------------------------------------------------------------
+function is_verbose()
+{
+	${OPT_COMMON_VERBOSE}
+}
+
+#---------------------------------------------------------------------
+function set_dry_run()
+{
+	OPT_COMMON_DRY_RUN="$(to_bool $1)"
+}
+
+#---------------------------------------------------------------------
+function is_dry_run()
+{
+	${OPT_COMMON_DRY_RUN}
+}
+
+#---------------------------------------------------------------------
+function run()
+{
+	if ${OPT_COMMON_DRY_RUN}
+	then
+		info "SKIP: ${@}"
+	else
+		debug "Running '${@}'"
+		"${@}"
+	fi
+}
+
+#---------------------------------------------------------------------
+function quietly()
+{
+	local command="${1}"
+	shift
+
+	if is_verbose
+	then
+		run "${command}" "${@}"
+	else
+		run "${command}" "${@}" >/dev/null
+	fi
+}
+
+#---------------------------------------------------------------------
+# Display an error, but do not exit; this is for use in cases
+# where the caller wants to take some action (such as printing
+# usage info) between the error message and exiting.
+function error_msg()
+{
+	echo -e "- ${RED}ERROR${NC}: ${@}" 1>&2
+}
+
 # Display a fatal error, then exit immediately
 function error()
 {
-	echo -e "- ${RED}ERROR${NC}: ${@}" 1>&2
+	error_msg "${@}"
 	exit 1
 }
 
@@ -59,12 +145,31 @@ function debug()
 }
 
 #---------------------------------------------------------------------
+function banner()
+{
+	echo "+-----------------------------------------------------------------------"
+	echo "+ ${@}"
+	echo "+-----------------------------------------------------------------------"
+}
+
+#---------------------------------------------------------------------
+function maybe_banner()
+{
+	if is_verbose
+	then
+		banner "${@}"
+	else
+		info "${@}"
+	fi
+}
+
+#---------------------------------------------------------------------
 # Add a prefix to every line piped via stdin;
 # Example:
 #    cat <somefile> | prefix "contents: "
 function prefix()
 {
-	sed "s/^/${1}/"
+	while IFS= read -r line; do echo -e "${1}${line}"; done
 }
 
 #---------------------------------------------------------------------
@@ -92,14 +197,6 @@ function spinner()
 	)
 	echo ""
 	return 0
-}
-
-#---------------------------------------------------------------------
-function banner()
-{
-	echo "+-----------------------------------------------------------------------"
-	echo "+ ${@}"
-	echo "+-----------------------------------------------------------------------"
 }
 
 #---------------------------------------------------------------------
